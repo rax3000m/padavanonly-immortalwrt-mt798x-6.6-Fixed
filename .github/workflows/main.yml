@@ -8,6 +8,9 @@ on:
       branch_name:
         description: 'Name of the new branch'
         required: true
+permissions:
+  contents: write
+  actions: write
 jobs:
   create-branch:
     runs-on: ubuntu-latest

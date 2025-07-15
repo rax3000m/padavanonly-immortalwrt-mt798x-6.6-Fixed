@@ -1,0 +1,29 @@
+name: 在特定提交创建分支
+on:
+  workflow_dispatch:
+    inputs:
+      commit_hash:
+        description: '要创建分支的提交 SHA'
+        required: true
+      branch_name:
+        description: '新分支名称'
+        required: true
+permissions:
+  contents: write
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.commit_hash }}
+          fetch-depth: 0
+      - name: 配置 Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      - name: 创建并推送分支
+        run: |
+          git checkout -b ${{ github.event.inputs.branch_name }}
+          git push origin ${{ github.event.inputs.branch_name }}
